@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.dobrepapu.controller.MainController" stylesheets="@../css/style.css">
+
+    <!-- Lewy panel nawigacji -->
+    <left>
+        <VBox spacing="15" styleClass="nav-panel">
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+            <Label text="🍽️ DobrePAPu" styleClass="app-title"/>
+            <Separator/>
+            <Button text="Moje Przepisy" onAction="#showRecipes" maxWidth="Infinity" styleClass="nav-button"/>
+            <Button text="Składniki" onAction="#showIngredients" maxWidth="Infinity" styleClass="nav-button"/>
+            <!-- Tutaj w przyszłości można dać Profil, Import/Eksport -->
+        </VBox>
+    </left>
+
+    <!-- Środkowa i Prawa kolumna zamknięte w SplitPane -->
+    <center>
+        <SplitPane dividerPositions="0.35" styleClass="main-split">
+            
+            <!-- Środkowy panel listy -->
+            <VBox spacing="10" styleClass="list-panel">
+                <padding>
+                    <Insets top="15" right="10" bottom="15" left="10"/>
+                </padding>
+                
+                <HBox spacing="5">
+                    <TextField fx:id="searchField" promptText="Szukaj..." HBox.hgrow="ALWAYS"/>
+                    <!-- W przyszłości tu ikona lupy -->
+                </HBox>
+                
+                <ListView fx:id="itemListView" VBox.vgrow="ALWAYS" styleClass="item-list"/>
+                
+                <HBox spacing="10" alignment="CENTER">
+                    <Button fx:id="addBtn" text="+" onAction="#handleAdd" styleClass="action-btn" prefWidth="40"/>
+                    <Button fx:id="deleteBtn" text="-" onAction="#handleDelete" styleClass="action-btn" prefWidth="40"/>
+                </HBox>
+            </VBox>
+
+            <!-- Prawy panel szczegółów -->
+            <VBox spacing="15" styleClass="details-panel">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <Label fx:id="detailsTitleLabel" text="Wybierz element" styleClass="details-title" wrapText="true"/>
+                <Separator/>
+                
+                <!-- Miejsce na potencjalne zdjęcie lub dodatkowe informacje u góry -->
+                <HBox spacing="20">
+                    <!-- Miejsce na obrazek, statystyki itp. -->
+                </HBox>
+
+                <!-- Główna treść opisu / instrukcji -->
+                <TextArea fx:id="detailsContentArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true" styleClass="details-content"/>
+                
+                <!-- W przyszłości przyciski Export, Udostępnij, Edytuj u dołu -->
+            </VBox>
+            
+        </SplitPane>
+    </center>
+
+</BorderPane>
