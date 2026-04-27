@@ -1,21 +1,21 @@
 .root {
-    /* font w stylu San Francisco / Apple */
+    /* Wymuszamy font w stylu San Francisco / Apple */
     -fx-font-family: "-apple-system", "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    -fx-background-color: #F2F2F7; 
+    -fx-background-color: #F2F2F7; /* Typowe dla iOS jasnoszare tło systemu */
 }
 
-/* Panel Nawigacyjny (Lewy - styl paska bocznego) */
+/* Panel Nawigacyjny (Lewy - styl paska bocznego macOS) */
 .nav-panel {
     -fx-background-color: #FFFFFF;
     -fx-min-width: 220px;
-    -fx-border-color: #E5E5EA; /* linia oddzielająca */
+    -fx-border-color: #E5E5EA; /* Bardzo subtelna linia oddzielająca */
     -fx-border-width: 0 1px 0 0;
 }
 
 .app-title {
     -fx-font-size: 22px;
-    -fx-font-weight: 700; 
-    -fx-text-fill: #1C1C1E;
+    -fx-font-weight: 700; /* Gruby font typowy dla nagłówków iOS */
+    -fx-text-fill: #1C1C1E; /* Prawie czarny, mniej męczący wzrok */
     -fx-padding: 0 0 15 0;
 }
 
@@ -27,7 +27,7 @@
     -fx-alignment: center-left;
     -fx-padding: 9px 14px; /* Zmniejszone o 1px z powodu ramki */
     -fx-background-radius: 10px;
-    -fx-border-color: #D1D1D6; /* Jasnoszara obramówka */
+    -fx-border-color: #D1D1D6; /* Jasnoszara, subtelna obramówka */
     -fx-border-width: 1px;
     -fx-border-radius: 10px;
     -fx-cursor: hand;
@@ -35,7 +35,7 @@
 
 .nav-button:hover {
     -fx-background-color: #E5E5EA;
-    -fx-border-color: #C7C7CC; /* ciemniejsza ramka przy najechaniu */
+    -fx-border-color: #C7C7CC; /* Nieco ciemniejsza ramka przy najechaniu */
 }
 
 /* Środkowy panel i rozdzielacz */
@@ -52,13 +52,13 @@
 /* Panele (Karty na jasnoszarym tle) */
 .list-panel, .details-panel {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 16px; /* zaokrąglenia */
+    -fx-background-radius: 16px; /* Duże, "jabłkowe" zaokrąglenia */
     -fx-border-width: 0;
-    /* miękki, mocno rozmyty cień */
+    /* Bardzo miękki, mocno rozmyty cień */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 20, 0, 0, 5);
 }
 
-/* Pasek wyszukiwania */
+/* Pasek wyszukiwania - styl iOS */
 .text-field {
     -fx-padding: 10px 15px;
     -fx-background-radius: 20px; /* Kształt pigułki */
@@ -69,7 +69,7 @@
 
 .text-field:focused {
     -fx-background-color: #E5E5EA;
-    /* cienka niebieska obwódka przy kliknięciu */
+    /* Dodajemy cienką niebieską obwódkę przy kliknięciu */
     -fx-border-color: #007AFF; 
     -fx-border-radius: 20px;
     -fx-border-width: 2px;
@@ -94,7 +94,7 @@
     -fx-background-color: #F2F2F7;
 }
 
-/* Zaznaczenie na liście */
+/* Zaznaczenie na liście - używamy iOS Blue */
 .item-list .list-cell:selected {
     -fx-background-color: #007AFF; 
     -fx-text-fill: white;
@@ -103,11 +103,11 @@
 
 /* --- Przyciski akcji (+ / -) w stylu "Outline" --- */
 .action-btn {
-    -fx-background-color: transparent; /* Przezroczyste tło*/
+    -fx-background-color: transparent; /* Przezroczyste tło, żeby ramka grała główną rolę */
     -fx-text-fill: #007AFF; /* Niebieski tekst / ikona */
     -fx-border-color: #007AFF; /* Niebieska obramówka */
     -fx-border-width: 1.5px;
-    -fx-border-radius: 20px; /* okrągłe ramki */
+    -fx-border-radius: 20px; /* Całkowicie okrągłe ramki */
     -fx-background-radius: 20px; 
     -fx-font-weight: 600;
     -fx-font-size: 18px;
@@ -121,7 +121,7 @@
     -fx-text-fill: #FFFFFF;
 }
 
-/* Przycisk usuwania */
+/* Przycisk usuwania - iOS Red */
 #deleteBtn {
     -fx-text-fill: #FF3B30; 
     -fx-border-color: #FF3B30;
