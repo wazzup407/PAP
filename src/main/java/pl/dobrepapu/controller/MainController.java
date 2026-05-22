@@ -96,7 +96,7 @@ public class MainController {
                 
                 Stage stage = new Stage();
                 stage.setTitle("Dodaj Nowy Przepis");
-                stage.setScene(new Scene(root, 600, 500)); // Ustawiamy domyślny rozmiar okienka
+                stage.setScene(new Scene(root, 600, 700)); // Ustawiamy domyślny rozmiar okienka
                 
                 // Ustawienie Modality sprawia, że nowe okno blokuje to pod spodem (nie można klikać w główne okno, dopóki nie zamkniemy formularza)
                 stage.initModality(Modality.APPLICATION_MODAL);

@@ -3,6 +3,7 @@ package pl.dobrepapu.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -10,6 +11,16 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pl.dobrepapu.dao.IngredientDAO;
 import pl.dobrepapu.model.Ingredient;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class RecipeFormController {
 
@@ -18,10 +29,20 @@ public class RecipeFormController {
     @FXML private TextField timeField;
     @FXML private TextArea instructionsArea;
     
-    // Zmienione na Ingredient
     @FXML private ComboBox<Ingredient> ingredientComboBox; 
     @FXML private TextField ingredientQuantityField;
     @FXML private ListView<String> recipeIngredientsList;
+
+    @FXML private ImageView recipeImageView;
+    @FXML private Label imagePathLabel;
+    private String savedImagePath = "";
+
+    @FXML private Button star1;
+    @FXML private Button star2;
+    @FXML private Button star3;
+    @FXML private Button star4;
+    @FXML private Button star5;
+    private int recipeRating = 3;
 
     private IngredientDAO ingredientDAO = new IngredientDAO();
     // Specjalna lista, która automatycznie aktualizuje interfejs użytkownika
@@ -63,6 +84,62 @@ public class RecipeFormController {
         } else {
             System.out.println("Błąd: Wybierz składnik i wpisz ilość!");
         }
+    }
+
+    @FXML
+    public void handleAddImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wybierz zdjęcie potrawy");
+        
+        // Filtrujemy, żeby użytkownik mógł wybrać tylko obrazki
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Obrazy", "*.png", "*.jpg", "*.jpeg")
+        );
+        
+        Stage stage = (Stage) nameField.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        
+        if (selectedFile != null) {
+            try {
+                // Dodajemy timestamp do nazwy pliku, aby uniknąć nadpisania dwóch plików o tej samej nazwie
+                String fileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                
+                // Folder "images" utworzy się sam dzięki App.java
+                Path destPath = Paths.get("images", fileName);
+                
+                // Kopiujemy plik z komputera użytkownika do folderu naszego projektu
+                Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
+                
+                // Zapisujemy ścieżkę i odświeżamy etykietę w oknie
+                savedImagePath = destPath.toString();
+                imagePathLabel.setText(selectedFile.getName());
+                
+                // Ładujemy podgląd zdjęcia do ImageView (potrzebujemy prefixu "file:")
+                Image image = new Image(destPath.toUri().toString());
+                recipeImageView.setImage(image);
+                
+            } catch (IOException e) {
+                System.err.println("Błąd podczas wgrywania pliku: " + e.getMessage());
+            }
+        }
+    }
+
+    @FXML public void setRating1() { updateStars(1); }
+    @FXML public void setRating2() { updateStars(2); }
+    @FXML public void setRating3() { updateStars(3); }
+    @FXML public void setRating4() { updateStars(4); }
+    @FXML public void setRating5() { updateStars(5); }
+
+    // Ta metoda zamienia tekst na przyciskach w zależności od wybranej oceny
+    private void updateStars(int rating) {
+        this.recipeRating = rating;
+        
+        // Znak ★ (U+2605) to pełna gwiazdka, a ☆ (U+2606) to pusta
+        star1.setText(rating >= 1 ? "★" : "☆");
+        star2.setText(rating >= 2 ? "★" : "☆");
+        star3.setText(rating >= 3 ? "★" : "☆");
+        star4.setText(rating >= 4 ? "★" : "☆");
+        star5.setText(rating >= 5 ? "★" : "☆");
     }
 
     @FXML

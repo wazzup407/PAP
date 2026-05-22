@@ -3,6 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox spacing="15" stylesheets="@../css/style.css" styleClass="details-panel"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
@@ -42,7 +46,27 @@
             <Button text="Dodaj" onAction="#handleAddIngredient" style="-fx-background-color: #E5E5EA; -fx-cursor: hand; -fx-background-radius: 5px;"/>
         </HBox>
         
-        <ListView fx:id="recipeIngredientsList" prefHeight="120" style="-fx-background-radius: 5px;"/>
+    <ListView fx:id="recipeIngredientsList" prefHeight="120" style="-fx-background-radius: 5px;"/>
+    </VBox>
+
+    <VBox spacing="10">
+        <Label text="Zdjęcie potrawy:" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Wybierz plik..." onAction="#handleAddImage" style="-fx-background-color: #E5E5EA; -fx-cursor: hand; -fx-background-radius: 5px;"/>
+            <Label fx:id="imagePathLabel" text="Brak zdjęcia" style="-fx-text-fill: gray;"/>
+        </HBox>
+        <ImageView fx:id="recipeImageView" fitHeight="120" fitWidth="200" preserveRatio="true"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Ocena (1-5):" style="-fx-font-weight: bold;"/>
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Button fx:id="star1" text="★" onAction="#setRating1" style="-fx-background-color: transparent; -fx-font-size: 26px; -fx-text-fill: #FFCC00; -fx-cursor: hand; -fx-padding: 0;"/>
+            <Button fx:id="star2" text="★" onAction="#setRating2" style="-fx-background-color: transparent; -fx-font-size: 26px; -fx-text-fill: #FFCC00; -fx-cursor: hand; -fx-padding: 0;"/>
+            <Button fx:id="star3" text="★" onAction="#setRating3" style="-fx-background-color: transparent; -fx-font-size: 26px; -fx-text-fill: #FFCC00; -fx-cursor: hand; -fx-padding: 0;"/>
+            <Button fx:id="star4" text="☆" onAction="#setRating4" style="-fx-background-color: transparent; -fx-font-size: 26px; -fx-text-fill: #FFCC00; -fx-cursor: hand; -fx-padding: 0;"/>
+            <Button fx:id="star5" text="☆" onAction="#setRating5" style="-fx-background-color: transparent; -fx-font-size: 26px; -fx-text-fill: #FFCC00; -fx-cursor: hand; -fx-padding: 0;"/>
+        </HBox>
     </VBox>
 
     <VBox spacing="5" VBox.vgrow="ALWAYS">
