@@ -48,12 +48,12 @@ public class RecipeFormController {
 
     private RecipeDAO recipeDAO = new RecipeDAO();
     private IngredientDAO ingredientDAO = new IngredientDAO();
-    // Specjalna lista, która automatycznie aktualizuje interfejs użytkownika
+    // lista która automatycznie aktualizuje interfejs użytkownika
     private ObservableList<String> temporaryIngredients = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Ładowanie składników z bazy prosto do ComboBoxa
+        // Ładowanie składników z bazy do ComboBoxa
         ingredientComboBox.getItems().addAll(ingredientDAO.getAllIngredients());
         
         // Połączenie tymczasowej listy z kontrolką ListView na ekranie
@@ -68,16 +68,16 @@ public class RecipeFormController {
         // Prosta walidacja - czy wybrano składnik i wpisano ilość
         if (selectedIngredient != null && quantityStr != null && !quantityStr.trim().isEmpty()) {
             try {
-                // Zamieniamy przecinek na kropkę (wygoda dla użytkownika) i parsujemy
+                // przecinek na kropkę (wygoda dla użytkownika) i parsujemy
                 double quantity = Double.parseDouble(quantityStr.replace(",", "."));
                 
-                // Tworzymy czytelny tekst, np.: "Jajo - 2.0 x 100g"
+                // Tworzymy tekst, np.: "Jajo - 2.0 x 100g"
                 String displayString = selectedIngredient.getName() + " - " + quantity + " x " + selectedIngredient.getUnit();
                 
                 // Dodajemy do listy (widok zaktualizuje się automatycznie)
                 temporaryIngredients.add(displayString);
                 
-                // Czyścimy formularz składnika, żeby był gotowy na kolejny wpis
+                // Czyścimy formularz składnika
                 ingredientComboBox.getSelectionModel().clearSelection();
                 ingredientQuantityField.clear();
                 
@@ -107,17 +107,17 @@ public class RecipeFormController {
                 // Dodajemy timestamp do nazwy pliku, aby uniknąć nadpisania dwóch plików o tej samej nazwie
                 String fileName = System.currentTimeMillis() + "_" + selectedFile.getName();
                 
-                // Folder "images" utworzy się sam dzięki App.java
+                // Folder "images" utworzy się sam
                 Path destPath = Paths.get("images", fileName);
                 
-                // Kopiujemy plik z komputera użytkownika do folderu naszego projektu
+                // Kopiujemy plik z komputera do folderu projektu
                 Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
                 
                 // Zapisujemy ścieżkę i odświeżamy etykietę w oknie
                 savedImagePath = destPath.toString();
                 imagePathLabel.setText(selectedFile.getName());
                 
-                // Ładujemy podgląd zdjęcia do ImageView (potrzebujemy prefixu "file:")
+                // Ładujemy podgląd zdjęcia do ImageView
                 Image image = new Image(destPath.toUri().toString());
                 recipeImageView.setImage(image);
                 
@@ -133,7 +133,7 @@ public class RecipeFormController {
     @FXML public void setRating4() { updateStars(4); }
     @FXML public void setRating5() { updateStars(5); }
 
-    // Ta metoda zamienia tekst na przyciskach w zależności od wybranej oceny
+    // zamienia tekst na przyciskach w zależności od wybranej oceny
     private void updateStars(int rating) {
         this.recipeRating = rating;
         
@@ -157,7 +157,7 @@ public class RecipeFormController {
             // Prosta walidacja: czy nazwa nie jest pusta
             if (name == null || name.trim().isEmpty()) {
                 System.out.println("Błąd: Nazwa przepisu nie może być pusta!");
-                return; // Przerwanie zapisu
+                return;
             }
 
             // Zamiana tekstu na liczby (domyślnie 0, jeśli ktoś zostawi puste)
@@ -167,7 +167,7 @@ public class RecipeFormController {
             // Tworzymy nowy obiekt Recipe (id = 0, bo baza SQLite sama nada mu unikalne ID dzięki AUTOINCREMENT)
             Recipe newRecipe = new Recipe(0, name, portions, time, instructions, recipeRating, savedImagePath);
 
-            // Zapisujemy do bazy!
+            // Zapisujemy do bazy
             recipeDAO.addRecipe(newRecipe);
             
             System.out.println("Pomyślnie zapisano przepis: " + name);

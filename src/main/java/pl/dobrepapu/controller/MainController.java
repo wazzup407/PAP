@@ -25,7 +25,7 @@ public class MainController {
     @FXML private Button addBtn;
     @FXML private Button deleteBtn;
 
-    // Nowe elementy prawego panelu
+    //elementy prawego panelu
     @FXML private Label detailsTitleLabel;
     @FXML private Label detailRatingLabel;
     @FXML private Label detailInfoLabel;
@@ -103,7 +103,7 @@ public class MainController {
                 }
             }
 
-            // Makro dla przepisu wyliczy Osoba 2, zostawiamy ładne "puste" wartości
+            // Makro dla przepisu to dla Miłosza
             macroCaloriesLabel.setText("Kalorie: -- kcal");
             macroProteinLabel.setText("Białko: -- g");
             macroFatLabel.setText("Tłuszcze: -- g");
@@ -145,15 +145,14 @@ public class MainController {
                 
                 Stage stage = new Stage();
                 stage.setTitle("Dodaj Nowy Przepis");
-                stage.setScene(new Scene(root, 700, 800)); // Ustawiamy domyślny rozmiar okienka
+                stage.setScene(new Scene(root, 700, 800)); // domyślny rozmiar okienka
                 
-                // Ustawienie Modality sprawia, że nowe okno blokuje to pod spodem (nie można klikać w główne okno, dopóki nie zamkniemy formularza)
+                // Ustawienie Modality sprawia, że nowe okno blokuje to pod spodem
                 stage.initModality(Modality.APPLICATION_MODAL);
                 
-                // Pokazuje okno i "zatrzymuje" ten kod do momentu jego zamknięcia
+                // Pokazuje okno i zatrzymuje ten kod do momentu zamknięcia
                 stage.showAndWait();
                 
-                // Tutaj w przyszłości dodam odświeżanie listy przepisów po dodaniu
                 showRecipes(); 
                 
             } catch (Exception e) {
@@ -162,7 +161,7 @@ public class MainController {
             }
 
         } else {
-            // Tymczasowe proste dodawanie dla składnika - To jest zadanie dla Tymka
+            // Tymczasowe proste dodawanie dla składnika - To jest dla Tymka
             TextInputDialog dialog = new TextInputDialog("Nowy Składnik");
             dialog.setTitle("Dodaj Składnik");
             dialog.setHeaderText("Podaj nazwę nowego składnika");

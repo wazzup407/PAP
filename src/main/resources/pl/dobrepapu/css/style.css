@@ -3,7 +3,7 @@
     -fx-background-color: #F2F2F7; 
 }
 
-/* Panel Nawigacyjny (Lewy - styl paska bocznego macOS) */
+/* Panel Nawigacyjny (Lewy) */
 .nav-panel {
     -fx-background-color: #FFFFFF;
     -fx-min-width: 220px;
@@ -13,12 +13,12 @@
 
 .app-title {
     -fx-font-size: 22px;
-    -fx-font-weight: 700; /* Gruby font typowy dla nagłówków iOS */
-    -fx-text-fill: #1C1C1E; /* Prawie czarny, mniej męczący wzrok */
+    -fx-font-weight: 700; /* Gruby font dla nagłówków */
+    -fx-text-fill: #1C1C1E; /* Prawie czarny */
     -fx-padding: 0 0 15 0;
 }
 
-/* --- Przyciski w menu bocznym --- */
+/* Przyciski w menu bocznym */
 .nav-button {
     -fx-background-color: transparent;
     -fx-text-fill: #1C1C1E;
@@ -26,7 +26,7 @@
     -fx-alignment: center-left;
     -fx-padding: 9px 14px; /* Zmniejszone o 1px z powodu ramki */
     -fx-background-radius: 10px;
-    -fx-border-color: #D1D1D6; /* Jasnoszara, subtelna obramówka */
+    -fx-border-color: #D1D1D6; /* Jasnoszara obramówka */
     -fx-border-width: 1px;
     -fx-border-radius: 10px;
     -fx-cursor: hand;
@@ -51,13 +51,13 @@
 /* Panele (Karty na jasnoszarym tle) */
 .list-panel, .details-panel {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 16px; /* Duże, "jabłkowe" zaokrąglenia */
+    -fx-background-radius: 16px; /* Duże zaokrąglenia */
     -fx-border-width: 0;
-    /* Bardzo miękki, mocno rozmyty cień */
+    /* miękki, mocno rozmyty cień */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 20, 0, 0, 5);
 }
 
-/* Pasek wyszukiwania - styl iOS */
+/* Pasek wyszukiwania */
 .text-field {
     -fx-padding: 10px 15px;
     -fx-background-radius: 20px; /* Kształt pigułki */
@@ -68,7 +68,7 @@
 
 .text-field:focused {
     -fx-background-color: #E5E5EA;
-    /* Dodajemy cienką niebieską obwódkę przy kliknięciu */
+    /* cienka niebieska obwódka przy kliknięciu */
     -fx-border-color: #007AFF; 
     -fx-border-radius: 20px;
     -fx-border-width: 2px;
@@ -93,16 +93,16 @@
     -fx-background-color: #F2F2F7;
 }
 
-/* Zaznaczenie na liście - używamy iOS Blue */
+/* Zaznaczenie na liście - Blue */
 .item-list .list-cell:selected {
     -fx-background-color: #007AFF; 
     -fx-text-fill: white;
     -fx-font-weight: 600;
 }
 
-/* --- Przyciski akcji (+ / -) w stylu "Outline" --- */
+/* Przyciski akcji (+ / -) */
 .action-btn {
-    -fx-background-color: transparent; /* Przezroczyste tło, żeby ramka grała główną rolę */
+    -fx-background-color: transparent;
     -fx-text-fill: #007AFF; /* Niebieski tekst / ikona */
     -fx-border-color: #007AFF; /* Niebieska obramówka */
     -fx-border-width: 1.5px;
@@ -120,7 +120,7 @@
     -fx-text-fill: #FFFFFF;
 }
 
-/* Przycisk usuwania - iOS Red */
+/* Przycisk usuwania - Red */
 #deleteBtn {
     -fx-text-fill: #FF3B30; 
     -fx-border-color: #FF3B30;
@@ -147,4 +147,67 @@
 
 .details-content .content {
     -fx-background-color: transparent;
+}
+
+/* Stylizacja nowych elementów formularza */
+
+/* Obszar tekstowy (Instrukcje) */
+.text-area {
+    -fx-background-color: #E5E5EA;
+    -fx-background-radius: 10px;
+    -fx-border-width: 0;
+    -fx-padding: 5px;
+}
+
+/* Wewnętrzne tło obszaru tekstowego */
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
+.text-area:focused {
+    -fx-border-color: #007AFF;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}
+
+/* Rozwijana lista */
+.combo-box {
+    -fx-background-color: #E5E5EA;
+    -fx-background-radius: 20px;
+    -fx-padding: 2px 10px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #007AFF;
+    -fx-border-radius: 20px;
+    -fx-border-width: 2px;
+}
+
+/*  paski przewijania */
+/* okrągłe paski */
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: #C7C7CC;
+    -fx-background-radius: 5em;
+}
+
+.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #AEAEB2;
+}
+
+/* Ukrycie strzałek na końcach paska przewijania */
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " "; /* Pusty kształt */
 }
