@@ -111,7 +111,7 @@
     -fx-font-weight: 600;
     -fx-font-size: 18px;
     -fx-cursor: hand;
-    -fx-padding: 3.5px 13.5px; /* Kompensacja grubości ramki */
+    -fx-padding: 3.5px 10px; /* Kompensacja grubości ramki */
 }
 
 /* Efekt wypełnienia przycisku po najechaniu myszką */
