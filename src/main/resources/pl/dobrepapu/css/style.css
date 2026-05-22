@@ -1,7 +1,6 @@
 .root {
-    /* Wymuszamy font w stylu San Francisco / Apple */
-    -fx-font-family: "-apple-system", "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    -fx-background-color: #F2F2F7; /* Typowe dla iOS jasnoszare tło systemu */
+    -fx-font-family: "Segoe UI Emoji", "Apple Color Emoji", "-apple-system", "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -fx-background-color: #F2F2F7; 
 }
 
 /* Panel Nawigacyjny (Lewy - styl paska bocznego macOS) */

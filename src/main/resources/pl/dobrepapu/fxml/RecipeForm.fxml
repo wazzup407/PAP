@@ -33,9 +33,17 @@
         <TextField fx:id="timeField" promptText="np. 45" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
     </GridPane>
 
-    <VBox spacing="5">
-        <Label text="Składniki (zostaną dodane później):" style="-fx-font-weight: bold; -fx-text-fill: gray;"/>
-        </VBox>
+    <VBox spacing="10">
+        <Label text="Składniki przepisu:" style="-fx-font-weight: bold;"/>
+        
+        <HBox spacing="10">
+            <ComboBox fx:id="ingredientComboBox" promptText="Wybierz składnik..." HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <TextField fx:id="ingredientQuantityField" promptText="Ilość (np. 2.5)" prefWidth="100"/>
+            <Button text="Dodaj" onAction="#handleAddIngredient" style="-fx-background-color: #E5E5EA; -fx-cursor: hand; -fx-background-radius: 5px;"/>
+        </HBox>
+        
+        <ListView fx:id="recipeIngredientsList" prefHeight="120" style="-fx-background-radius: 5px;"/>
+    </VBox>
 
     <VBox spacing="5" VBox.vgrow="ALWAYS">
         <Label text="Kroki przygotowania (DIY):" style="-fx-font-weight: bold;"/>
