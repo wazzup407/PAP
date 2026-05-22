@@ -12,17 +12,32 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import java.io.File;
 
 import java.util.Optional;
 
 public class MainController {
 
     @FXML private ListView<Object> itemListView;
-    @FXML private Label detailsTitleLabel;
-    @FXML private TextArea detailsContentArea;
     @FXML private TextField searchField;
     @FXML private Button addBtn;
     @FXML private Button deleteBtn;
+
+    // Nowe elementy prawego panelu
+    @FXML private Label detailsTitleLabel;
+    @FXML private Label detailRatingLabel;
+    @FXML private Label detailInfoLabel;
+    @FXML private TextArea detailInstructionsArea;
+    @FXML private ImageView detailImageView;
+
+    // Elementy kafelka z makroskładnikami
+    @FXML private VBox macroBox;
+    @FXML private Label macroCaloriesLabel;
+    @FXML private Label macroProteinLabel;
+    @FXML private Label macroFatLabel;
+    @FXML private Label macroCarbsLabel;
 
     private IngredientDAO ingredientDAO = new IngredientDAO();
     private RecipeDAO recipeDAO = new RecipeDAO();
@@ -60,30 +75,64 @@ public class MainController {
     }
 
     private void showDetails(Object item) {
+        macroBox.setVisible(true); // Pokazujemy panel makro
+
         if (item instanceof Recipe) {
             Recipe r = (Recipe) item;
             detailsTitleLabel.setText(r.getName());
             
-            String content = String.format("Czas: %d min | Porcje: %d\n\nKroki Przygotowania:\n%s",
-                    r.getPrepTime(), r.getPortions(), r.getInstructions());
+            // Rysowanie odpowiedniej liczby gwiazdek
+            StringBuilder stars = new StringBuilder();
+            for (int i = 0; i < r.getRating(); i++) stars.append("★");
+            for (int i = r.getRating(); i < 5; i++) stars.append("☆");
+            detailRatingLabel.setText(stars.toString());
             
-            // Tutaj w przyszłości będzie wyświetlanie obrazka i obliczanie makro
-            detailsContentArea.setText(content);
+            detailInfoLabel.setText(String.format("⏱ Czas: %d min   |   🍽 Porcje: %d", r.getPrepTime(), r.getPortions()));
+            detailInstructionsArea.setText(r.getInstructions());
+            
+            // Ładowanie zdjęcia (jeśli istnieje)
+            detailImageView.setImage(null);
+            if (r.getImagePath() != null && !r.getImagePath().isEmpty()) {
+                try {
+                    File imgFile = new File(r.getImagePath());
+                    if (imgFile.exists()) {
+                        detailImageView.setImage(new Image(imgFile.toURI().toString()));
+                    }
+                } catch (Exception e) {
+                    System.out.println("Nie udało się załadować zdjęcia.");
+                }
+            }
+
+            // Makro dla przepisu wyliczy Osoba 2, zostawiamy ładne "puste" wartości
+            macroCaloriesLabel.setText("Kalorie: -- kcal");
+            macroProteinLabel.setText("Białko: -- g");
+            macroFatLabel.setText("Tłuszcze: -- g");
+            macroCarbsLabel.setText("Węglowodany: -- g");
 
         } else if (item instanceof Ingredient) {
             Ingredient i = (Ingredient) item;
             detailsTitleLabel.setText(i.getName());
+            detailRatingLabel.setText(""); // Składniki nie mają ocen
+            detailImageView.setImage(null); // Składniki nie mają (na razie) zdjęć
             
-            String content = String.format("Jednostka bazowa: %s\n\nWartości Odżywcze (na jednostkę):\nKalorie: %.2f kcal\nBiałko: %.2f g\nTłuszcze: %.2f g\nWęglowodany: %.2f g",
-                    i.getUnit(), i.getCalories(), i.getProtein(), i.getFat(), i.getCarbs());
+            detailInfoLabel.setText("⚖ Jednostka bazowa: " + i.getUnit());
+            detailInstructionsArea.setText("Brak dodatkowego opisu instrukcji dla samego składnika.");
             
-            detailsContentArea.setText(content);
+            // Makro dla pojedynczego składnika znamy bezpośrednio z bazy
+            macroCaloriesLabel.setText(String.format("Kalorie: %.1f kcal", i.getCalories()));
+            macroProteinLabel.setText(String.format("Białko: %.1f g", i.getProtein()));
+            macroFatLabel.setText(String.format("Tłuszcze: %.1f g", i.getFat()));
+            macroCarbsLabel.setText(String.format("Węglowodany: %.1f g", i.getCarbs()));
         }
     }
 
     private void clearDetails() {
         detailsTitleLabel.setText("Wybierz element z listy");
-        detailsContentArea.setText("");
+        if(detailRatingLabel != null) detailRatingLabel.setText("");
+        if(detailInfoLabel != null) detailInfoLabel.setText("");
+        if(detailInstructionsArea != null) detailInstructionsArea.setText("");
+        if(detailImageView != null) detailImageView.setImage(null);
+        if(macroBox != null) macroBox.setVisible(false);
     }
 
     @FXML
@@ -96,7 +145,7 @@ public class MainController {
                 
                 Stage stage = new Stage();
                 stage.setTitle("Dodaj Nowy Przepis");
-                stage.setScene(new Scene(root, 600, 700)); // Ustawiamy domyślny rozmiar okienka
+                stage.setScene(new Scene(root, 700, 800)); // Ustawiamy domyślny rozmiar okienka
                 
                 // Ustawienie Modality sprawia, że nowe okno blokuje to pod spodem (nie można klikać w główne okno, dopóki nie zamkniemy formularza)
                 stage.initModality(Modality.APPLICATION_MODAL);
@@ -105,7 +154,7 @@ public class MainController {
                 stage.showAndWait();
                 
                 // Tutaj w przyszłości dodam odświeżanie listy przepisów po dodaniu
-                // showRecipes(); 
+                showRecipes(); 
                 
             } catch (Exception e) {
                 System.err.println("Błąd podczas otwierania formularza: " + e.getMessage());

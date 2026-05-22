@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.dobrepapu.controller.MainController" stylesheets="@../css/style.css">
 
@@ -43,24 +44,38 @@
                 </HBox>
             </VBox>
 
-            <!-- Prawy panel szczegółów -->
             <VBox spacing="15" styleClass="details-panel">
                 <padding>
                     <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
                 
-                <Label fx:id="detailsTitleLabel" text="Wybierz element" styleClass="details-title" wrapText="true"/>
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label fx:id="detailsTitleLabel" text="Wybierz element" styleClass="details-title" wrapText="true"/>
+                    <Label fx:id="detailRatingLabel" style="-fx-font-size: 24px; -fx-text-fill: #FFCC00;"/>
+                </HBox>
                 <Separator/>
                 
-                <!-- Miejsce na potencjalne zdjęcie lub dodatkowe informacje u góry -->
-                <HBox spacing="20">
-                    <!-- Miejsce na obrazek, statystyki itp. -->
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="detailInfoLabel" style="-fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        
+                        <Label text="Sposób przygotowania / Opis:" style="-fx-font-weight: bold;"/>
+                        <TextArea fx:id="detailInstructionsArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true" styleClass="details-content"/>
+                    </VBox>
+                    
+                    <VBox spacing="15" prefWidth="200" alignment="TOP_CENTER">
+                        <ImageView fx:id="detailImageView" fitWidth="220" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"/>
+                        
+                        <VBox fx:id="macroBox" spacing="8" style="-fx-background-color: #F2F2F7; -fx-padding: 15; -fx-background-radius: 10;" visible="false">
+                            <Label text="Wartości Odżywcze" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                            <Separator/>
+                            <Label fx:id="macroCaloriesLabel" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="macroProteinLabel" />
+                            <Label fx:id="macroFatLabel" />
+                            <Label fx:id="macroCarbsLabel" />
+                        </VBox>
+                    </VBox>
                 </HBox>
-
-                <!-- Główna treść opisu / instrukcji -->
-                <TextArea fx:id="detailsContentArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true" styleClass="details-content"/>
-                
-                <!-- W przyszłości przyciski Export, Udostępnij, Edytuj u dołu -->
             </VBox>
             
         </SplitPane>

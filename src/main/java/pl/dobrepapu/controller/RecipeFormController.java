@@ -10,7 +10,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pl.dobrepapu.dao.IngredientDAO;
+import pl.dobrepapu.dao.RecipeDAO;
 import pl.dobrepapu.model.Ingredient;
+import pl.dobrepapu.model.Recipe;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
@@ -44,6 +46,7 @@ public class RecipeFormController {
     @FXML private Button star5;
     private int recipeRating = 3;
 
+    private RecipeDAO recipeDAO = new RecipeDAO();
     private IngredientDAO ingredientDAO = new IngredientDAO();
     // Specjalna lista, która automatycznie aktualizuje interfejs użytkownika
     private ObservableList<String> temporaryIngredients = FXCollections.observableArrayList();
@@ -144,9 +147,35 @@ public class RecipeFormController {
 
     @FXML
     public void handleSave() {
-        System.out.println("Kliknięto zapisz!");
-        // Tu na sam koniec docelowy zapis do bazy całego przepisu
-        closeWindow();
+        try {
+            // Pobieranie danych z pól tekstowych
+            String name = nameField.getText();
+            String portionsStr = portionsField.getText();
+            String timeStr = timeField.getText();
+            String instructions = instructionsArea.getText();
+
+            // Prosta walidacja: czy nazwa nie jest pusta
+            if (name == null || name.trim().isEmpty()) {
+                System.out.println("Błąd: Nazwa przepisu nie może być pusta!");
+                return; // Przerwanie zapisu
+            }
+
+            // Zamiana tekstu na liczby (domyślnie 0, jeśli ktoś zostawi puste)
+            int portions = portionsStr.isEmpty() ? 0 : Integer.parseInt(portionsStr);
+            int time = timeStr.isEmpty() ? 0 : Integer.parseInt(timeStr);
+
+            // Tworzymy nowy obiekt Recipe (id = 0, bo baza SQLite sama nada mu unikalne ID dzięki AUTOINCREMENT)
+            Recipe newRecipe = new Recipe(0, name, portions, time, instructions, recipeRating, savedImagePath);
+
+            // Zapisujemy do bazy!
+            recipeDAO.addRecipe(newRecipe);
+            
+            System.out.println("Pomyślnie zapisano przepis: " + name);
+            closeWindow();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Błąd: Porcje i czas muszą być liczbami!");
+        }
     }
 
     @FXML

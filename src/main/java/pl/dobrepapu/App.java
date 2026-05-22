@@ -22,7 +22,7 @@ public class App extends Application {
 
         // Wczytanie widoku
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/pl/dobrepapu/fxml/Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1500, 800);
         
         stage.setTitle("DobrePAPu - Menedżer Przepisów");
         stage.setScene(scene);
