@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" stylesheets="@../css/style.css" styleClass="details-panel"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pl.dobrepapu.controller.RecipeFormController">
+
+    <padding>
+        <Insets top="20" right="25" bottom="20" left="25"/>
+    </padding>
+
+    <Label text="🍳 Dodaj Nowy Przepis" styleClass="details-title"/>
+    <Separator/>
+
+    <VBox spacing="5">
+        <Label text="Nazwa dania:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="nameField" promptText="np. Spaghetti Bolognese"/>
+    </VBox>
+
+    <GridPane hgap="15" vgap="5">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
+
+        <Label text="Liczba porcji (np. 2):" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="portionsField" promptText="Ilość porcji" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+        <Label text="Czas przygotowania (min):" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="timeField" promptText="np. 45" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    </GridPane>
+
+    <VBox spacing="5">
+        <Label text="Składniki (zostaną dodane później):" style="-fx-font-weight: bold; -fx-text-fill: gray;"/>
+        </VBox>
+
+    <VBox spacing="5" VBox.vgrow="ALWAYS">
+        <Label text="Kroki przygotowania (DIY):" style="-fx-font-weight: bold;"/>
+        <TextArea fx:id="instructionsArea" promptText="Opisz krok po kroku jak przygotować danie..." wrapText="true" VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button text="❌ Anuluj" onAction="#handleCancel" style="-fx-background-color: transparent; -fx-text-fill: #FF3B30; -fx-cursor: hand;"/>
+        <Button text="💾 Zapisz Przepis" onAction="#handleSave" style="-fx-background-color: #007AFF; -fx-text-fill: white; -fx-background-radius: 10px; -fx-padding: 8 15; -fx-cursor: hand; -fx-font-weight: bold;"/>
+    </HBox>
+
+</VBox>
