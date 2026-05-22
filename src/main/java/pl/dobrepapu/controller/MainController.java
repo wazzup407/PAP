@@ -1,12 +1,17 @@
 package pl.dobrepapu.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import pl.dobrepapu.dao.IngredientDAO;
 import pl.dobrepapu.dao.RecipeDAO;
 import pl.dobrepapu.model.Ingredient;
 import pl.dobrepapu.model.Recipe;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 import java.util.Optional;
 
@@ -84,24 +89,35 @@ public class MainController {
     @FXML
     public void handleAdd() {
         if ("RECIPES".equals(currentMode)) {
-            // Tymczasowe proste dodawanie - docelowo tu otworzy się formularz
-            TextInputDialog dialog = new TextInputDialog("Nowy Przepis");
-            dialog.setTitle("Dodaj Przepis");
-            dialog.setHeaderText("Podaj nazwę nowego przepisu");
-            Optional<String> result = dialog.showAndWait();
-            
-            result.ifPresent(name -> {
-                Recipe r = new Recipe(0, name, 2, 30, "Zrób to i tamto...", 3, "");
-                recipeDAO.addRecipe(r);
-                showRecipes(); // Odświeżenie listy
-            });
+            // Ładowanie nowego formularza
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/pl/dobrepapu/fxml/RecipeForm.fxml"));
+                Parent root = loader.load();
+                
+                Stage stage = new Stage();
+                stage.setTitle("Dodaj Nowy Przepis");
+                stage.setScene(new Scene(root, 600, 500)); // Ustawiamy domyślny rozmiar okienka
+                
+                // Ustawienie Modality sprawia, że nowe okno blokuje to pod spodem (nie można klikać w główne okno, dopóki nie zamkniemy formularza)
+                stage.initModality(Modality.APPLICATION_MODAL);
+                
+                // Pokazuje okno i "zatrzymuje" ten kod do momentu jego zamknięcia
+                stage.showAndWait();
+                
+                // Tutaj w przyszłości dodam odświeżanie listy przepisów po dodaniu
+                // showRecipes(); 
+                
+            } catch (Exception e) {
+                System.err.println("Błąd podczas otwierania formularza: " + e.getMessage());
+                e.printStackTrace();
+            }
 
         } else {
-            // Tymczasowe proste dodawanie dla składnika
+            // Tymczasowe proste dodawanie dla składnika - To jest zadanie dla Tymka
             TextInputDialog dialog = new TextInputDialog("Nowy Składnik");
             dialog.setTitle("Dodaj Składnik");
             dialog.setHeaderText("Podaj nazwę nowego składnika");
-            Optional<String> result = dialog.showAndWait();
+            java.util.Optional<String> result = dialog.showAndWait();
 
             result.ifPresent(name -> {
                 Ingredient i = new Ingredient(0, name, "100g", 0, 0, 0, 0);
