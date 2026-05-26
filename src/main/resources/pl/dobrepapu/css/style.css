@@ -3,6 +3,10 @@
     -fx-background-color: #F2F2F7; 
 }
 
+.label {
+    -fx-text-fill: #1C1C1E;
+}
+
 /* Panel Nawigacyjny (Lewy) */
 .nav-panel {
     -fx-background-color: #FFFFFF;
@@ -128,6 +132,17 @@
 
 #deleteBtn:hover {
     -fx-background-color: #FF3B30;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Przycisk edycji - Orange */
+#editBtn {
+    -fx-text-fill: #FF9500; 
+    -fx-border-color: #FF9500;
+}
+
+#editBtn:hover {
+    -fx-background-color: #FF9500;
     -fx-text-fill: #FFFFFF;
 }
 

@@ -40,6 +40,7 @@
                 
                 <HBox spacing="10" alignment="CENTER">
                     <Button fx:id="addBtn" text="+" onAction="#handleAdd" styleClass="action-btn" prefWidth="40"/>
+                    <Button fx:id="editBtn" text="✏️" onAction="#handleEdit" styleClass="action-btn" prefWidth="40"/>
                     <Button fx:id="deleteBtn" text="-" onAction="#handleDelete" styleClass="action-btn" prefWidth="40"/>
                 </HBox>
             </VBox>

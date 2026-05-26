@@ -11,8 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pl.dobrepapu.dao.IngredientDAO;
 import pl.dobrepapu.dao.RecipeDAO;
+import pl.dobrepapu.dao.RecipeIngredientDAO;
 import pl.dobrepapu.model.Ingredient;
 import pl.dobrepapu.model.Recipe;
+import pl.dobrepapu.model.RecipeIngredient;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
@@ -23,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeFormController {
 
@@ -48,8 +52,11 @@ public class RecipeFormController {
 
     private RecipeDAO recipeDAO = new RecipeDAO();
     private IngredientDAO ingredientDAO = new IngredientDAO();
+    private RecipeIngredientDAO recipeIngredientDAO = new RecipeIngredientDAO();
     // lista która automatycznie aktualizuje interfejs użytkownika
     private ObservableList<String> temporaryIngredients = FXCollections.observableArrayList();
+    private List<RecipeIngredient> tempRecipeIngredients = new ArrayList<>();
+    private Recipe recipeToEdit = null;
 
     @FXML
     public void initialize() {
@@ -58,7 +65,48 @@ public class RecipeFormController {
         
         // Połączenie tymczasowej listy z kontrolką ListView na ekranie
         recipeIngredientsList.setItems(temporaryIngredients);
+
+        // Obsługa klawisza DELETE do usuwania wybranego składnika z listy
+        recipeIngredientsList.setOnKeyPressed(event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.DELETE) {
+                int selectedIdx = recipeIngredientsList.getSelectionModel().getSelectedIndex();
+                if (selectedIdx != -1) {
+                    temporaryIngredients.remove(selectedIdx);
+                    tempRecipeIngredients.remove(selectedIdx);
+                }
+            }
+        });
     }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipeToEdit = recipe;
+        if (recipe != null) {
+            nameField.setText(recipe.getName());
+            portionsField.setText(String.valueOf(recipe.getPortions()));
+            timeField.setText(String.valueOf(recipe.getPrepTime()));
+            instructionsArea.setText(recipe.getInstructions());
+            updateStars(recipe.getRating());
+            savedImagePath = recipe.getImagePath();
+            if (savedImagePath != null && !savedImagePath.isEmpty()) {
+                File file = new File(savedImagePath);
+                if (file.exists()) {
+                    recipeImageView.setImage(new Image(file.toURI().toString()));
+                    imagePathLabel.setText(file.getName());
+                }
+            }
+            
+            // Wczytywanie istniejących składników dla edytowanego przepisu
+            List<RecipeIngredient> existingIngredients = recipeIngredientDAO.getIngredientsForRecipe(recipe.getId());
+            for (RecipeIngredient ri : existingIngredients) {
+                if (ri.getIngredient() != null) {
+                    String displayString = ri.getIngredient().getName() + " - " + ri.getQuantity() + " x " + ri.getIngredient().getUnit();
+                    temporaryIngredients.add(displayString);
+                    tempRecipeIngredients.add(ri);
+                }
+            }
+        }
+    }
+
 
     @FXML
     public void handleAddIngredient() {
@@ -76,6 +124,9 @@ public class RecipeFormController {
                 
                 // Dodajemy do listy (widok zaktualizuje się automatycznie)
                 temporaryIngredients.add(displayString);
+                
+                // Track actual objects for saving
+                tempRecipeIngredients.add(new RecipeIngredient(0, selectedIngredient.getId(), quantity, selectedIngredient));
                 
                 // Czyścimy formularz składnika
                 ingredientComboBox.getSelectionModel().clearSelection();
@@ -164,13 +215,35 @@ public class RecipeFormController {
             int portions = portionsStr.isEmpty() ? 0 : Integer.parseInt(portionsStr);
             int time = timeStr.isEmpty() ? 0 : Integer.parseInt(timeStr);
 
-            // Tworzymy nowy obiekt Recipe (id = 0, bo baza SQLite sama nada mu unikalne ID dzięki AUTOINCREMENT)
-            Recipe newRecipe = new Recipe(0, name, portions, time, instructions, recipeRating, savedImagePath);
-
-            // Zapisujemy do bazy
-            recipeDAO.addRecipe(newRecipe);
+            int recipeId;
+            if (recipeToEdit != null) {
+                recipeToEdit.setName(name);
+                recipeToEdit.setPortions(portions);
+                recipeToEdit.setPrepTime(time);
+                recipeToEdit.setInstructions(instructions);
+                recipeToEdit.setRating(recipeRating);
+                recipeToEdit.setImagePath(savedImagePath);
+                recipeDAO.updateRecipe(recipeToEdit);
+                recipeId = recipeToEdit.getId();
+                
+                // Usunięcie starych składników przed ponownym zapisaniem
+                recipeIngredientDAO.deleteIngredientsForRecipe(recipeId);
+            } else {
+                Recipe newRecipe = new Recipe(0, name, portions, time, instructions, recipeRating, savedImagePath);
+                recipeId = recipeDAO.addRecipe(newRecipe);
+            }
             
-            System.out.println("Pomyślnie zapisano przepis: " + name);
+            if (recipeId != -1) {
+                // Zapisujemy składniki
+                for (RecipeIngredient ri : tempRecipeIngredients) {
+                    ri.setRecipeId(recipeId);
+                    recipeIngredientDAO.addRecipeIngredient(ri);
+                }
+                System.out.println("Pomyślnie zapisano przepis: " + name + " ze składnikami.");
+            } else {
+                System.err.println("Błąd: Nie udało się zapisać przepisu w bazie.");
+            }
+            
             closeWindow();
 
         } catch (NumberFormatException e) {
