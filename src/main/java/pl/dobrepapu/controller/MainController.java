@@ -42,6 +42,7 @@ public class MainController {
     @FXML private Label detailInfoLabel;
     @FXML private TextArea detailInstructionsArea;
     @FXML private ImageView detailImageView;
+    @FXML private Label detailTagsLabel;
 
     // Elementy kafelka z makroskładnikami
     @FXML private VBox macroBox;
@@ -132,6 +133,13 @@ public class MainController {
             for (int i = r.getRating(); i < 5; i++) stars.append("☆");
             detailRatingLabel.setText(stars.toString());
             
+            // Wyświetlanie tagów
+            if (r.getTags() != null && !r.getTags().isEmpty()) {
+                detailTagsLabel.setText("🏷️ " + String.join(", ", r.getTags()));
+            } else {
+                detailTagsLabel.setText("🏷️ Brak tagów");
+            }
+            
             detailInfoLabel.setText(String.format("⏱ Czas: %d min   |   🍽 Porcje: %d", r.getPrepTime(), r.getPortions()));
             
             // Dynamiczne wczytywanie składników przepisu
@@ -191,6 +199,7 @@ public class MainController {
             detailsTitleLabel.setText(i.getName());
             detailRatingLabel.setText(""); // Składniki nie mają ocen
             detailImageView.setImage(null); // Składniki nie mają (na razie) zdjęć
+            detailTagsLabel.setText("");
             
             detailInfoLabel.setText("⚖ Jednostka bazowa: " + i.getUnit());
             detailInstructionsArea.setText("Brak dodatkowego opisu instrukcji dla samego składnika.");

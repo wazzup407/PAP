@@ -57,6 +57,9 @@
                     <Label fx:id="detailsTitleLabel" text="Wybierz element" styleClass="details-title" wrapText="true"/>
                     <Label fx:id="detailRatingLabel" style="-fx-font-size: 24px; -fx-text-fill: #FFCC00;"/>
                 </HBox>
+                
+                <Label fx:id="detailTagsLabel" style="-fx-text-fill: #007AFF; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                
                 <Separator/>
                 
                 <HBox spacing="20" VBox.vgrow="ALWAYS">
