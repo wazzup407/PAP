@@ -41,10 +41,10 @@
                 <ListView fx:id="itemListView" VBox.vgrow="ALWAYS" styleClass="item-list"/>
                 
                 <HBox spacing="10" alignment="CENTER">
-                    <Button fx:id="addBtn" text="+" onAction="#handleAdd" styleClass="action-btn" prefWidth="40"/>
-                    <Button fx:id="editBtn" text="✏️" onAction="#handleEdit" styleClass="action-btn" prefWidth="40"/>
-                    <Button fx:id="exportBtn" text="⬆️" onAction="#handleExport" styleClass="action-btn" prefWidth="40"/>
-                    <Button fx:id="deleteBtn" text="-" onAction="#handleDelete" styleClass="action-btn" prefWidth="40"/>
+                    <Button fx:id="addBtn" text="+" onAction="#handleAdd" styleClass="action-btn" minWidth="-Infinity"/>
+                    <Button fx:id="editBtn" text="Edit" onAction="#handleEdit" styleClass="action-btn" minWidth="-Infinity"/>
+                    <Button fx:id="exportBtn" text="Export" onAction="#handleExport" styleClass="action-btn" minWidth="-Infinity"/>
+                    <Button fx:id="deleteBtn" text="-" onAction="#handleDelete" styleClass="action-btn" minWidth="-Infinity"/>
                 </HBox>
             </VBox>
 

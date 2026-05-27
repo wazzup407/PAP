@@ -76,6 +76,11 @@
                     </HBox>
                 </VBox>
 
+                <VBox spacing="5">
+                    <Label text="Tagi (rozdzielone przecinkami):" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="tagsField" promptText="np. wege, fit, szybkie, kurczak"/>
+                </VBox>
+
                 <VBox spacing="5" prefHeight="150">
                     <Label text="Kroki przygotowania (DIY):" style="-fx-font-weight: bold;"/>
                     <TextArea fx:id="instructionsArea" promptText="Opisz krok po krok jak przygotować danie..." wrapText="true" VBox.vgrow="ALWAYS"/>

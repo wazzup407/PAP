@@ -39,6 +39,8 @@ public class RecipeFormController {
     @FXML private TextField ingredientQuantityField;
     @FXML private ListView<String> recipeIngredientsList;
 
+    @FXML private TextField tagsField;
+
     @FXML private ImageView recipeImageView;
     @FXML private Label imagePathLabel;
     private String savedImagePath = "";
@@ -215,6 +217,18 @@ public class RecipeFormController {
             int portions = portionsStr.isEmpty() ? 0 : Integer.parseInt(portionsStr);
             int time = timeStr.isEmpty() ? 0 : Integer.parseInt(timeStr);
 
+            String tagsText = tagsField.getText();
+            List<String> tagsList = new ArrayList<>();
+            if (tagsText != null && !tagsText.trim().isEmpty()) {
+                // Dzielimy tekst po przecinku
+                for (String tag : tagsText.split(",")) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        tagsList.add(trimmedTag);
+                    }
+                }
+            }
+
             int recipeId;
             if (recipeToEdit != null) {
                 recipeToEdit.setName(name);
@@ -223,6 +237,9 @@ public class RecipeFormController {
                 recipeToEdit.setInstructions(instructions);
                 recipeToEdit.setRating(recipeRating);
                 recipeToEdit.setImagePath(savedImagePath);
+
+                recipeToEdit.setTags(tagsList);
+
                 recipeDAO.updateRecipe(recipeToEdit);
                 recipeId = recipeToEdit.getId();
                 
@@ -230,6 +247,7 @@ public class RecipeFormController {
                 recipeIngredientDAO.deleteIngredientsForRecipe(recipeId);
             } else {
                 Recipe newRecipe = new Recipe(0, name, portions, time, instructions, recipeRating, savedImagePath);
+                newRecipe.setTags(tagsList);
                 recipeId = recipeDAO.addRecipe(newRecipe);
             }
             
