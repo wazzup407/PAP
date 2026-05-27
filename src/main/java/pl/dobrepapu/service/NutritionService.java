@@ -5,9 +5,6 @@ import java.util.Map;
 
 public class NutritionService {
 
-    /**
-     * Wewnętrzna klasa pełniąca rolę "raportu" podsumowującego całe danie.
-     */
     public static class MacroSummary {
         private final double totalCalories;
         private final double totalProtein;
@@ -27,11 +24,6 @@ public class NutritionService {
         public double getTotalCarbs() { return totalCarbs; }
     }
 
-    /**
-     * Główna metoda licząca makroskładniki.
-     * Używamy Mapy, gdzie kluczem jest fizyczny Składnik (Ingredient), 
-     * a wartością (Double) jest jego mnożnik ilości z przepisu (np. 2 porcje po 100g).
-     */
     public MacroSummary calculateMacros(Map<Ingredient, Double> ingredientsWithQuantities) {
         double totalCalories = 0;
         double totalProtein = 0;
@@ -40,7 +32,7 @@ public class NutritionService {
 
         for (Map.Entry<Ingredient, Double> entry : ingredientsWithQuantities.entrySet()) {
             Ingredient ingredient = entry.getKey();
-            Double quantityMultiplier = entry.getValue(); // Ilość zadeklarowana w przepisie
+            Double quantityMultiplier = entry.getValue();
 
             totalCalories += ingredient.getCalories() * quantityMultiplier;
             totalProtein += ingredient.getProtein() * quantityMultiplier;
