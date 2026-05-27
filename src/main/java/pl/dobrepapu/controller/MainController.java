@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
+import javafx.stage.FileChooser;
+import pl.dobrepapu.service.RecipeTransferService;
 
 public class MainController {
 
@@ -50,6 +52,7 @@ public class MainController {
 
     private IngredientDAO ingredientDAO = new IngredientDAO();
     private RecipeDAO recipeDAO = new RecipeDAO();
+    private RecipeTransferService transferService = new RecipeTransferService();
 
     private String currentMode = "RECIPES"; // Może być "RECIPES" albo "INGREDIENTS"
 
@@ -404,6 +407,83 @@ public class MainController {
                     ingredientDAO.deleteIngredient(((Ingredient) selected).getId());
                     showIngredients();
                 }
+            }
+        }
+    }
+
+    // --- NOWE METODY DO EKSPORTU I IMPORTU ---
+
+    @FXML
+    public void handleExport() {
+        Object selected = itemListView.getSelectionModel().getSelectedItem();
+        
+        // Zabezpieczenie: Można eksportować tylko przepisy
+        if (selected == null || !(selected instanceof Recipe)) {
+            showErrorAlert("Wybierz przepis z listy, który chcesz wyeksportować.");
+            return;
+        }
+
+        Recipe recipe = (Recipe) selected;
+        
+        // Tworzenie i konfiguracja okna dialogowego "Zapisz jako"
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Eksportuj Przepis do pliku JSON");
+        
+        // Sugerowana nazwa pliku to nazwa przepisu (np. Spaghetti.json)
+        String defaultFileName = recipe.getName().replaceAll("[^a-zA-Z0-9.-]", "_") + ".json";
+        fileChooser.setInitialFileName(defaultFileName);
+        
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Pliki JSON", "*.json"));
+
+        Stage stage = (Stage) itemListView.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            try {
+                transferService.exportRecipe(recipe.getId(), file.getAbsolutePath());
+                
+                // Informacja o sukcesie
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Eksport zakończony");
+                alert.setHeaderText(null);
+                alert.setContentText("Przepis został pomyślnie wyeksportowany do pliku:\n" + file.getName());
+                alert.showAndWait();
+                
+            } catch (Exception e) {
+                showErrorAlert("Wystąpił błąd podczas eksportu: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void handleImport() {
+        if (!"RECIPES".equals(currentMode)) {
+            showErrorAlert("Przejdź do zakładki z Przepisami, aby zaimportować nowy przepis.");
+            return;
+        }
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Zaimportuj Przepis z pliku JSON");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Pliki JSON", "*.json"));
+
+        Stage stage = (Stage) itemListView.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            try {
+                transferService.importRecipe(file.getAbsolutePath());
+
+                showRecipes();
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Import zakończony");
+                alert.setHeaderText(null);
+                alert.setContentText("Przepis został pomyślnie wczytany i dodany do Twojej bazy!");
+                alert.showAndWait();
+                
+            } catch (Exception e) {
+                showErrorAlert("Wystąpił błąd podczas importu. Upewnij się, że plik jest poprawny.\n" + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

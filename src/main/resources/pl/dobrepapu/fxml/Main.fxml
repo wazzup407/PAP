@@ -17,6 +17,8 @@
             <Separator/>
             <Button text="Moje Przepisy" onAction="#showRecipes" maxWidth="Infinity" styleClass="nav-button"/>
             <Button text="Składniki" onAction="#showIngredients" maxWidth="Infinity" styleClass="nav-button"/>
+            <Separator/>
+            <Button text="⬇️ Importuj Przepis" onAction="#handleImport" maxWidth="Infinity" styleClass="nav-button"/>
             <!-- Tutaj w przyszłości można dać Profil, Import/Eksport -->
         </VBox>
     </left>
@@ -41,6 +43,7 @@
                 <HBox spacing="10" alignment="CENTER">
                     <Button fx:id="addBtn" text="+" onAction="#handleAdd" styleClass="action-btn" prefWidth="40"/>
                     <Button fx:id="editBtn" text="✏️" onAction="#handleEdit" styleClass="action-btn" prefWidth="40"/>
+                    <Button fx:id="exportBtn" text="⬆️" onAction="#handleExport" styleClass="action-btn" prefWidth="40"/>
                     <Button fx:id="deleteBtn" text="-" onAction="#handleDelete" styleClass="action-btn" prefWidth="40"/>
                 </HBox>
             </VBox>
