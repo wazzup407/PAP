@@ -75,10 +75,32 @@ public class IngredientDAO {
     }
 
 
-    public void addIngredient(Ingredient i) {
+    // Czy na pewno?
+    public Ingredient getIngredientByName(String name) {
+        String sql = "SELECT * FROM ingredients WHERE name = ?";
+        try (Connection conn = DatabaseManager.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Ingredient(
+                            rs.getInt("id"), rs.getString("name"), rs.getString("unit"),
+                            rs.getDouble("calories"), rs.getDouble("protein"),
+                            rs.getDouble("fat"), rs.getDouble("carbs")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public int addIngredient(Ingredient i) {
         String sql = "INSERT INTO ingredients (name, unit, calories, protein, fat, carbs) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, i.getName());
             pstmt.setString(2, i.getUnit());
             pstmt.setDouble(3, i.getCalories());
@@ -86,9 +108,16 @@ public class IngredientDAO {
             pstmt.setDouble(5, i.getFat());
             pstmt.setDouble(6, i.getCarbs());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public void deleteIngredient(int id) {
@@ -101,4 +130,6 @@ public class IngredientDAO {
             e.printStackTrace();
         }
     }
+
+    
 }

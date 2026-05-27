@@ -182,4 +182,27 @@ public class RecipeDAO {
             e.printStackTrace();
         }
     }
+
+    public Recipe getRecipeById(int id) {
+    String sql = "SELECT * FROM recipes WHERE id = ?";
+    try (Connection conn = DatabaseManager.connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                Recipe recipe = new Recipe(
+                        rs.getInt("id"), rs.getString("name"), rs.getInt("portions"),
+                        rs.getInt("prep_time"), rs.getString("instructions"),
+                        rs.getInt("rating"), rs.getString("image_path")
+                );
+                recipe.setTags(getTagsForRecipe(recipe.getId(), conn));
+                return recipe;
+            }
+        }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
